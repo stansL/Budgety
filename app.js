@@ -1,7 +1,34 @@
 //Use of module pattern
 //Budget  Controller
 
-var budgetController = (function () {})();
+
+var budgetController = (function () {
+    var data = {
+        items: {
+            expenses: [],
+            incomes: []
+        },
+        totals: {
+            expenses: [],
+            incomes: []
+        }
+    }
+
+    var Expense = function (id, description, value) {
+        this.id = id;
+        this.description = description;
+        this.value = value;
+    };
+
+    var Income = function (id, description, value) {
+        this.id = id;
+        this.description = description;
+        this.value = value;
+    };
+
+
+
+})();
 
 
 
