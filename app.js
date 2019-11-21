@@ -5,14 +5,14 @@
 var budgetController = (function () {
     var data = {
         items: {
-            expenses: [],
-            incomes: []
+            inc: [],
+            exp: []
         },
         totals: {
-            expenses: [],
-            incomes: []
+            inc: 0,
+            exp: 0
         }
-    }
+    };
 
     var Expense = function (id, description, value) {
         this.id = id;
@@ -26,8 +26,28 @@ var budgetController = (function () {
         this.value = value;
     };
 
+    return {
+        addItem: function (input) {
+            var type = input.type;
+            var newItem;
+            var id;
+            if (data.items[type].length > 0) {
+                var obj = data.items[type][data.items[type].length - 1];
+                id = obj.id + 1;
+            } else {
+                id = 1;
+            }
 
 
+            if (input.type === 'inc') {
+                newItem = new Income(id, input.description, input.value);
+            } else {
+                newItem = new Expense(id, input.description, input.value);
+            }
+            data.items[input.type].push(newItem);
+            return newItem;
+        }
+    };
 })();
 
 
@@ -68,6 +88,21 @@ var uiController = (function () {
 //Global App Controller
 var appController = (function (bController, uController) {
 
+    var addItemHandler = function () {
+        //        1. Get the field input data
+        var input = uController.getInput();
+
+        //        2. Add the item to the budget controller
+
+        var newItem = bController.addItem(input);
+
+
+        //        3. Add the item to the UI
+
+        //        4. Calculate the budget
+
+        //        5. Display/Update the budget to the UI
+    };
     var setUpListeners = function () {
         document.querySelector(uController.domStrings.btnAdd).addEventListener('click', addItemHandler);
         document.addEventListener('keypress', e => {
@@ -80,18 +115,7 @@ var appController = (function (bController, uController) {
     }
 
 
-    var addItemHandler = function () {
-        //        1. Get the field input data
-        var input = uController.getInput();
 
-        //        2. Add the item to the budget controller
-
-        //        3. Add the item to the UI
-
-        //        4. Calculate the budget
-
-        //        5. Display/Update the budget to the UI
-    };
 
     return {
         init: function () {
