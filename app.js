@@ -46,7 +46,8 @@ var budgetController = (function () {
             }
             data.items[input.type].push(newItem);
             return newItem;
-        }
+        },
+        data: data //TODO: remember to delete this
     };
 })();
 
@@ -58,7 +59,9 @@ var uiController = (function () {
         inputType: '.add__type',
         inputDescription: '.add__description',
         inputValue: '.add__value',
-        btnAdd: '.add__btn'
+        btnAdd: '.add__btn',
+        incomeList: '.income__list',
+        expenseList: '.expenses__list'
 
     }
     //UI Code
@@ -75,6 +78,32 @@ var uiController = (function () {
                 description: description,
                 value: value
             };
+
+
+        },
+        addListItem: function (listItem, type) {
+            var html, newHtml, element;
+            //            listItem has an id,description and value
+            //            1. Create placeholder string with placeholder text
+
+            if (type === 'inc') {
+                html = '<div class="item clearfix" id="income-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">+ %value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+                element = document.querySelector(domStrings.incomeList);
+            } else if (type === 'exp') {
+                html = '<div class="item clearfix" id="expense-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">- %value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+                element = document.querySelector(domStrings.expenseList);
+
+            }
+
+
+
+            //            2. Replace placeholder text with actual data
+            newHtml = html.replace('%id%', listItem.id).replace('%description%', listItem.description).replace('%value%', listItem.value);
+
+            //            3. Insert html into the DOM
+            element.insertAdjacentHTML('beforeend', newHtml);
+
+
 
 
         },
@@ -95,9 +124,13 @@ var appController = (function (bController, uController) {
         //        2. Add the item to the budget controller
 
         var newItem = bController.addItem(input);
+        //        console.log(newItem); //TODO: delete this
+        //        console.log(bController.data); //TODO: delete this
 
 
         //        3. Add the item to the UI
+        uiController.addListItem(newItem, input.type);
+
 
         //        4. Calculate the budget
 
