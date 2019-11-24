@@ -138,22 +138,27 @@ var appController = (function (bController, uController) {
     var addItemHandler = function () {
         //        1. Get the field input data
         var input = uController.getInput();
+        if (input.type && input.description && input.value && input.value > 0) {
 
-        //        2. Add the item to the budget controller
+            //        2. Add the item to the budget controller
 
-        var newItem = bController.addItem(input);
-        //        console.log(newItem); //TODO: delete this
-        //        console.log(bController.data); //TODO: delete this
+            var newItem = bController.addItem(input);
+            //        console.log(newItem); //TODO: delete this
+            //        console.log(bController.data); //TODO: delete this
 
 
-        //        3. Add the item to the UI
-        uiController.addListItem(newItem, input.type);
+            //        3. Add the item to the UI
+            uiController.addListItem(newItem, input.type);
 
-        //        4. Clear the input fields
-        uiController.clearFields();
+            //        4. Clear the input fields
+            uiController.clearFields();
 
-        //        5. Calculate and update the budget
-        updateBudget();
+            //        5. Calculate and update the budget
+            updateBudget();
+        } else {
+            console.log("Missing Data");
+        }
+
 
 
     };
