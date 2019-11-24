@@ -72,7 +72,7 @@ var uiController = (function () {
             //            Get description - add__description
             var description = document.querySelector(domStrings.inputDescription).value;
             //            Get value - add__value
-            var value = document.querySelector(domStrings.inputValue).value;
+            var value = parseFloat(document.querySelector(domStrings.inputValue).value);
             return {
                 type: type,
                 description: description,
@@ -127,6 +127,14 @@ var uiController = (function () {
 //Global App Controller
 var appController = (function (bController, uController) {
 
+    var updateBudget = function () {
+
+
+        //        1. Calculate the budget
+        //        2. Return the budget 
+        //        3. Display/Update the budget to the UI
+    };
+
     var addItemHandler = function () {
         //        1. Get the field input data
         var input = uController.getInput();
@@ -144,10 +152,10 @@ var appController = (function (bController, uController) {
         //        4. Clear the input fields
         uiController.clearFields();
 
+        //        5. Calculate and update the budget
+        updateBudget();
 
-        //        5. Calculate the budget
 
-        //        6. Display/Update the budget to the UI
     };
     var setUpListeners = function () {
         document.querySelector(uController.domStrings.btnAdd).addEventListener('click', addItemHandler);
