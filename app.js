@@ -11,7 +11,9 @@ var budgetController = (function () {
         totals: {
             inc: 0,
             exp: 0
-        }
+        },
+        budget: 0,
+        percentage: 0
     };
 
     var Expense = function (id, description, value) {
@@ -25,6 +27,14 @@ var budgetController = (function () {
         this.description = description;
         this.value = value;
     };
+
+    var calculateTotals = function (type) {
+        var sum = 0;
+        data.items[type].forEach((c, i, arr) => {
+            sum += c.value;
+        });
+        data.totals[type] = sum;
+    }
 
     return {
         addItem: function (input) {
@@ -46,6 +56,29 @@ var budgetController = (function () {
             }
             data.items[input.type].push(newItem);
             return newItem;
+        },
+        calculateBudget: function () {
+            //            Calculate total income and expenses
+            calculateTotals('inc');
+            calculateTotals('exp');
+
+            //            Calculate budget -> income-expenses
+            data.budget = data.totals['inc'] - data.totals['exp'];
+            //            Calculate percentage of income spent
+            if (data.totals['inc'] > 0) {
+                data.percentage = Math.round((data.totals['exp'] / data.totals['inc']) * 100);
+            } else {
+                data.percentage = -1;
+            }
+        },
+
+        getBudget: function () {
+            return {
+                budget: data.budget,
+                totalExpenses: data.totals.exp,
+                totalIncome: data.totals.inc,
+                percentage: data.percentage
+            }
         },
         data: data //TODO: remember to delete this
     };
@@ -117,6 +150,10 @@ var uiController = (function () {
             fieldsArray[0].focus();
 
         },
+        updateBudgetUI: function (budget) {
+            console.log(budget);
+
+        },
         domStrings: domStrings
 
     };
@@ -131,8 +168,11 @@ var appController = (function (bController, uController) {
 
 
         //        1. Calculate the budget
+        bController.calculateBudget();
         //        2. Return the budget 
+        var budget = bController.getBudget();
         //        3. Display/Update the budget to the UI
+        uController.updateBudgetUI(budget);
     };
 
     var addItemHandler = function () {
