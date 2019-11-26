@@ -94,7 +94,11 @@ var uiController = (function () {
         inputValue: '.add__value',
         btnAdd: '.add__btn',
         incomeList: '.income__list',
-        expenseList: '.expenses__list'
+        expenseList: '.expenses__list',
+        budgetLabel: '.budget__value',
+        incomeLabel: '.budget__income--value',
+        expensesLabel: '.budget__expenses--value',
+        percentageLabel: '.budget__expenses--percentage'
 
     }
     //UI Code
@@ -151,7 +155,15 @@ var uiController = (function () {
 
         },
         updateBudgetUI: function (budget) {
-            console.log(budget);
+            document.querySelector(domStrings.incomeLabel).textContent = budget.totalIncome;
+            document.querySelector(domStrings.budgetLabel).textContent = budget.budget;
+            document.querySelector(domStrings.expensesLabel).textContent = budget.totalExpenses;
+
+            if (budget.percentage > 0) {
+                document.querySelector(domStrings.percentageLabel).textContent = budget.percentage + '% ';
+            } else {
+                document.querySelector(domStrings.percentageLabel).textContent = '---';
+            }
 
         },
         domStrings: domStrings
@@ -218,6 +230,12 @@ var appController = (function (bController, uController) {
 
     return {
         init: function () {
+            uController.updateBudgetUI({
+                budget: 0,
+                totalExpenses: 0,
+                totalIncome: 0,
+                percentage: -1
+            });
             setUpListeners();
         }
     }
