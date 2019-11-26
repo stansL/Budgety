@@ -57,6 +57,12 @@ var budgetController = (function () {
             data.items[input.type].push(newItem);
             return newItem;
         },
+        deleteItem: function (type, id) {
+            //            Either map of filter function
+            data.items[type] = data.items[type].filter(e => e.id !== id);
+            console.log(data);
+        },
+
         calculateBudget: function () {
             //            Calculate total income and expenses
             calculateTotals('inc');
@@ -234,9 +240,13 @@ var appController = (function (bController, uController) {
         if (itemId) {
             parts = itemId.split('-');
             type = parts[0];
-            id = parts[1];
+            id = parseInt(parts[1]);
             //            1. Delete item from data structure
+            budgetController.deleteItem(type, id);
             //            2. Delete item from the UI
+
+
+
             //            3. Update the budget
 
         }
