@@ -199,6 +199,14 @@ var appController = (function (bController, uController) {
         uController.updateBudgetUI(budget);
     };
 
+    var updatePercentages = function () {
+        //        1. Calculate percentages
+
+        //        2. Read them from budget controller
+        //        3. Update user interface
+
+    }
+
     var addItemHandler = function () {
         //        1. Get the field input data
         var input = uController.getInput();
@@ -219,6 +227,10 @@ var appController = (function (bController, uController) {
 
             //        5. Calculate and update the budget
             updateBudget();
+
+            //            6. Calculate and update percentages
+            updatePercentages();
+
         } else {
             console.log("Missing Data");
         }
@@ -252,6 +264,8 @@ var appController = (function (bController, uController) {
             uiController.deleteListItem(itemId);
             //            3. Update the budget
             updateBudget();
+            //            4. Calculate and update percentages
+            updatePercentages();
 
         }
 
