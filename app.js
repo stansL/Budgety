@@ -158,10 +158,10 @@ var uiController = (function () {
             //            1. Create placeholder string with placeholder text
 
             if (type === 'inc') {
-                html = '<div class="item clearfix" id="inc-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">+ %value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+                html = '<div class="item clearfix" id="inc-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
                 element = document.querySelector(domStrings.incomeList);
             } else if (type === 'exp') {
-                html = '<div class="item clearfix" id="exp-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">- %value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+                html = '<div class="item clearfix" id="exp-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
                 element = document.querySelector(domStrings.expenseList);
 
             }
@@ -169,7 +169,7 @@ var uiController = (function () {
 
 
             //            2. Replace placeholder text with actual data
-            newHtml = html.replace('%id%', listItem.id).replace('%description%', listItem.description).replace('%value%', listItem.value);
+            newHtml = html.replace('%id%', listItem.id).replace('%description%', listItem.description).replace('%value%', this.formatNumber(listItem.value, type));
 
             //            3. Insert html into the DOM
             element.insertAdjacentHTML('beforeend', newHtml);
@@ -194,9 +194,10 @@ var uiController = (function () {
 
         },
         updateBudgetUI: function (budget) {
-            document.querySelector(domStrings.incomeLabel).textContent = budget.totalIncome;
-            document.querySelector(domStrings.budgetLabel).textContent = budget.budget;
-            document.querySelector(domStrings.expensesLabel).textContent = budget.totalExpenses;
+            var type = budget.budget > 0 ? 'inc' : 'exp';
+            document.querySelector(domStrings.incomeLabel).textContent = this.formatNumber(budget.totalIncome, 'inc');
+            document.querySelector(domStrings.budgetLabel).textContent = this.formatNumber(budget.budget, type);
+            document.querySelector(domStrings.expensesLabel).textContent = this.formatNumber(budget.totalExpenses, 'exp');
 
             if (budget.percentage > 0) {
                 document.querySelector(domStrings.percentageLabel).textContent = budget.percentage + '% ';
@@ -222,6 +223,17 @@ var uiController = (function () {
                     current.textContent = '---';
                 }
             });
+
+        },
+        formatNumber: function (num, type) {
+            //            prepend sign
+            //            comma separators for thousands
+            //            two decimal places
+
+            num = (Math.abs(num)).toFixed(2);
+            var parts = num.split('.');
+            num = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "." + parts[1];
+            return (type === 'inc') ? ('+ ' + num) : ('- ' + num);
 
         },
 
