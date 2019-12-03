@@ -135,7 +135,14 @@ var uiController = (function () {
         monthLabel: '.budget__title--month',
         itemPercentage: '.item__percentage'
 
-    }
+    };
+
+    var nodeListIterator = function (list, callback) {
+        for (var i = 0; i < list.length; i++) {
+            callback(list[i], i);
+        }
+
+    };
     //UI Code
     return {
         getInput: function () {
@@ -211,12 +218,7 @@ var uiController = (function () {
         displayPercentages: function (percentages) {
             var fields = document.querySelectorAll(domStrings.itemPercentage);
 
-            var nodeListIterator = function (list, callback) {
-                for (var i = 0; i < list.length; i++) {
-                    callback(list[i], i);
-                }
 
-            };
             nodeListIterator(fields, function (current, index) {
                 if (percentages[index] > 0) {
                     current.textContent = percentages[index] + '%';
@@ -245,6 +247,15 @@ var uiController = (function () {
             year = now.getFullYear();
             month = now.getMonth();
             document.querySelector(domStrings.monthLabel).textContent = months[month] + ', ' + year;
+
+        },
+
+        handleTypeChange: function () {
+            var fields = document.querySelectorAll(domStrings.inputType + ',' + domStrings.inputDescription + ',' + domStrings.inputValue);
+            nodeListIterator(fields, e => {
+                e.classList.toggle('red-focus');
+            });
+            document.querySelector(domStrings.btnAdd).classList.toggle('red');
 
         },
 
@@ -323,6 +334,7 @@ var appController = (function (bController, uController) {
             }
 
         });
+        document.querySelector(dom.inputType).addEventListener('change', uController.handleTypeChange)
 
     };
 
